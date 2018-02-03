@@ -1,0 +1,1 @@
+zabbix_repo_url: http://repo.zabbix.com/zabbix/{{ zabbix_version }}/debian/pool/main/z/zabbix-release/{{ zabbix_apt_repo_version }}+{{ ansible_distribution_release }}_all.deb

@@ -1,0 +1,10 @@
+---
+# defaults file for zabbix_agent
+zabbix_version: 3.4
+zabbix_yum_repo_version: zabbix-release-3.4-2
+zabbix_apt_repo_version: zabbix-release_3.4-1
+zabbix_server:
+zabbix_agent_hostname: "{{ ansible_nodename }}"
+zabbix_auto_register_phrase: xeigha3aeCein4Uv9wae
+zabbix_agent_timeout: 3
+zabbix_agent_user_parameters: []

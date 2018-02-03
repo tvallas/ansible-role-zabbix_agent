@@ -1,0 +1,66 @@
+---
+# tasks file for zabbix_agent
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Add zabbix repository (RedHat)
+  package:
+    name: "{{ zabbix_repo_url }}"
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Add zabbix repository  (Debian)
+  apt:
+    deb: "{{ zabbix_repo_url }}"
+    state: present
+  when: (ansible_os_family == "Debian") and (ansible_distribution == "Debian")
+
+- name: Install zabbix agent (RedHat)
+  package:
+    name: zabbix-agent
+    state: "{{ zabbix_agent_package_state }}"
+  when: ansible_os_family == "RedHat"
+
+- name: Install zabbix agent (Debian)
+  apt:
+    update_cache: yes
+    name: zabbix-agent
+    state: "{{ zabbix_agent_package_state }}"
+  when: ansible_os_family == "Debian"
+
+- name: Zabbix agent configuration
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart zabbix agent
+
+- name: Ensure log and conf directories exists
+  file:
+    dest: "{{ item }}"
+    state: directory
+    owner: zabbix
+    group: zabbix
+  with_items:
+    - "/var/log/zabbix/"
+
+- name: Disable agent.d conf files (Unbuntu hack)
+  replace:
+    path: /etc/zabbix/zabbix_agentd.conf
+    regexp: '^Include=/etc/zabbix/zabbix_agentd.d.*'
+    replace: '#Include=/etc/zabbix/zabbix_agentd.d/*.conf'
+  when: ansible_distribution == "Ubuntu"
+
+
+- include_tasks: custom_templates.yml
+  when:
+    - ((ansible_os_family == "Debian") and (ansible_distribution == "Debian")) or (ansible_os_family == "RedHat")
+
+- name: Start zabbix agent service
+  systemd:
+    name: zabbix-agent
+    state: started
+    enabled: yes

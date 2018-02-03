@@ -1,0 +1,26 @@
+- name: Create low level discovery script for disk detection
+  copy:
+    src: files/lld-disks.py
+    dest: /usr/local/bin/lld-disks.py
+    owner: root
+    group: root
+    mode: 0755
+    backup: yes
+
+- name: Create disk stats user parameter file
+  template:
+    src: userparameter_diskstats.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.d/userparameter_diskstats.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart zabbix agent
+
+- name: Create mysql stats user parameter file
+  template:
+    src: userparameter_mysql.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.d/userparameter_mysql.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart zabbix agent
