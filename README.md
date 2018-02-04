@@ -41,7 +41,7 @@ Dependencies
 
 Following dependencies are automatically included:
 
- * ansible-role-selinux. Clients must have necessary configurations for zabbix_agent configured in the inventory.
+ * selinux. Clients must have necessary configurations for zabbix_agent configured in the inventory.
 
 
 Example Playbook
@@ -49,7 +49,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-         - { role: ansible-role-zabbix_agent, tags: zabbix_agent }
+         - { role: zabbix_agent, tags: zabbix_agent }
 
 License
 -------
