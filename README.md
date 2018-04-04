@@ -54,10 +54,10 @@ Example Playbook
 License
 -------
 
-Propriertary
+MIT
 
 
 Author Information
 ------------------
 
-Tuomas Vallaskangas
+Tuomas Vallaskangas tvallas@iki.fi
